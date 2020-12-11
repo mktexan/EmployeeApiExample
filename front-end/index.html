@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.1.13/dist/vuetify.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@2.1.13/dist/vuetify.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.0/css/foundation.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,500,600,700">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <v-app id="inspire">
+            <v-data-table :headers="headers" :items="employees" sort-by="calories" class="elevation-1">
+                <template v-slot:top>
+                    <v-toolbar flat color="white">
+                        <v-toolbar-title>Starboard Employees</v-toolbar-title>
+                        <v-divider class="mx-4" inset vertical></v-divider>
+                        <v-spacer></v-spacer>
+                        <v-dialog v-model="dialog" max-width="500px">
+                            <template v-slot:activator="{ on }">
+                                <v-btn color="primary" dark class="mb-2" v-on="on">New Item</v-btn>
+                            </template>
+                            <v-card>
+                                <v-card-title>
+                                    <span class="headline">{{ formTitle }}</span>
+                                </v-card-title>
+
+                                <v-card-text>
+                                    <v-container>
+                                        <v-row>
+                                            <v-col cols="12" sm="6" md="4">
+                                                <v-subheader>
+                                                    Id
+                                                </v-subheader>
+                                                <v-text-field v-model="editedItem.Id">
+                                                </v-text-field>
+                                            </v-col>
+                                            <v-col cols="12" sm="6" md="4">
+                                                <v-subheader>
+                                                    First Name
+                                                </v-subheader>
+                                                <v-text-field v-model="editedItem.FirstName">
+                                                </v-text-field>
+                                            </v-col>
+                                            <v-col cols="12" sm="6" md="4">
+                                                <v-subheader>
+                                                    Middle Initial
+                                                </v-subheader>
+                                                <v-text-field v-model="editedItem.MiddleInitial">
+                                                </v-text-field>
+                                            </v-col>
+                                            <v-col cols="12" sm="6" md="4">
+                                                <v-subheader>
+                                                    Last Name
+                                                </v-subheader>
+                                                <v-text-field v-model="editedItem.LastName">
+                                                </v-text-field>
+                                            </v-col>
+                                            <v-col cols="12" sm="12" md="8">
+                                                <v-subheader>
+                                                    Date Of Birth
+                                                </v-subheader>
+                                                <template>
+                                                    <v-menu ref="menu" v-model="menu" :close-on-content-click="false"
+                                                        transition="scale-transition" offset-y min-width="290px">
+                                                        <template v-slot:activator="{ on, attrs }">
+                                                            <v-text-field v-model="date" label="Birthday date"
+                                                                prepend-icon="mdi-calendar" readonly v-bind="attrs"
+                                                                v-on="on"></v-text-field>
+                                                        </template>
+                                                        <v-date-picker ref="picker" v-model="date"
+                                                            :max="new Date().toISOString().substr(0, 10)"
+                                                            min="1950-01-01" @change="createNewDateOfBirth">
+                                                        </v-date-picker>
+                                                    </v-menu>
+                                                </template>
+                                            </v-col>
+                                            <v-col cols="12" sm="12" md="8">
+                                                <v-subheader>
+                                                    Date Of Employment
+                                                </v-subheader>
+                                                <template>
+                                                    <v-menu ref="menu" v-model="menu2" :close-on-content-click="false"
+                                                        transition="scale-transition" offset-y min-width="290px">
+                                                        <template v-slot:activator="{ on, attrs }">
+                                                            <v-text-field v-model="date2" label="Employment Date"
+                                                                prepend-icon="mdi-calendar" readonly v-bind="attrs"
+                                                                v-on="on"></v-text-field>
+                                                        </template>
+                                                        <v-date-picker ref="picker" v-model="date2"
+                                                            :max="new Date().toISOString().substr(0, 10)"
+                                                            min="1950-01-01" @change="createNewEmploymentDate">
+                                                        </v-date-picker>
+                                                    </v-menu>
+                                                </template>
+                                            </v-col>
+
+                                            <v-col cols="12" sm="8" md="8">
+                                                <v-subheader>
+                                                    Active
+                                                </v-subheader>
+                                                <v-select :items="active" filled label="Solo field"  v-model="editedItem.Status"></v-select>
+                                            </v-col>
+                                        </v-row>
+                                    </v-container>
+                                </v-card-text>
+
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+                                    <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+                                    <v-btn color="blue darken-1" text @click="createNewEmployee">Add New User</v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
+                    </v-toolbar>
+                </template>
+                <template v-slot:item.action="{ item }">
+                    <v-icon small class="mr-2" @click="editItem(item)">
+                        edit
+                    </v-icon>
+                    <v-icon small @click="deleteItem(item)">
+                        delete
+                    </v-icon>
+                </template>
+                <template v-slot:no-data>
+                    <v-btn color="primary" @click="initialize">Reset</v-btn>
+                </template>
+            </v-data-table>
+        </v-app>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="https://cdn.jsdelivr.net/npm/babel-polyfill/dist/polyfill.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.1/js/foundation.min.js"></script>
+<script src="https://use.fontawesome.com/24fc242ce0.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/16.3.5/Tween.min.js"></script>
+<script src="./js/index.js"></script>
+
+</html>
