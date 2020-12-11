@@ -111,7 +111,7 @@ new Vue({
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+            return this.editedIndex === -1 ? 'Add Employee' : 'Edit Employee'
         },
     },
 
@@ -132,7 +132,6 @@ new Vue({
                     return response.json()
                 })
                 .then(data => {
-                    console.log(data)
                     this.employees = data
                 })
                 .catch(err => {
@@ -230,7 +229,7 @@ new Vue({
         },
 
         save() {
-            if (this.creatingNewUser) return Swal.fire('Failure!', 'Press Add New User to save employee.', 'error')
+            if (this.creatingNewUser) return Swal.fire('Failure!', 'You are creating a user, not editing.', 'error')
 
             const Id = this.editedItem.Id
             const firstName = this.editedItem.FirstName
