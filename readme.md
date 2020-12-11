@@ -17,5 +17,11 @@ Install the dependencies and start the server.
 
 ``` sh
 $ npm i
-$ nodemon || node server.js
+$ nodemon 
+```
+
+Or
+
+``` sh
+$ node server.js
 ```

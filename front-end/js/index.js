@@ -49,6 +49,7 @@ new Vue({
     data: () => ({
         dialog: false,
         menu: false,
+        creatingNewUser: false,
         menu2: false,
         date: null,
         date2: null,
@@ -76,34 +77,34 @@ new Vue({
         active: [true, false],
         editedIndex: -1,
         editedItem: {
-            Id: '',
-            FirstName: '',
-            MiddleInitial: '',
-            LastName: '',
-            DateOfBirth: '',
-            DateEmployed: '',
-            Status: false,
-            EditedId: ''
+            Id: null,
+            FirstName: null,
+            MiddleInitial: null,
+            LastName: null,
+            DateOfBirth: null,
+            DateEmployed: null,
+            Status: null,
+            EditedId: null
         },
         defaultItem: {
-            Id: '',
-            FirstName: '',
-            MiddleInitial: '',
-            LastName: '',
-            DateOfBirth: '',
-            DateEmployed: '',
+            Id: null,
+            FirstName: null,
+            MiddleInitial: null,
+            LastName: null,
+            DateOfBirth: null,
+            DateEmployed: null,
             Status: false,
             EditedId: ''
         },
         newItem: {
-            Id: '',
-            FirstName: '',
-            MiddleInitial: '',
-            LastName: '',
-            DateOfBirth: '',
-            DateEmployed: '',
+            Id: null,
+            FirstName: null,
+            MiddleInitial: null,
+            LastName: null,
+            DateOfBirth: null,
+            DateEmployed: null,
             Status: false,
-            EditedId: ''
+            EditedId: null
         },
     }),
 
@@ -139,6 +140,7 @@ new Vue({
         },
 
         editItem(item) {
+            this.creatingNewUser = false
             localStorage.setItem('editedId', item.Id)
             this.editedIndex = this.employees.indexOf(item)
             this.editedItem = Object.assign({}, item)
@@ -159,6 +161,22 @@ new Vue({
         },
 
         createNewEmployee() {
+            const id = this.editedItem.Id
+            const first = this.editedItem.FirstName
+            const middle = this.editedItem.MiddleInitial
+            const last = this.editedItem.LastName
+            const dob = this.date
+            const doe = this.date2
+            const empty = null
+
+            console.log(id, first, middle, last, dob, doe)
+
+            const fieldsActive = id !== empty && first !== empty && middle !== empty && last !== empty && dob !== empty && doe !== empty
+
+            console.log(fieldsActive)
+
+            if (!fieldsActive) return Swal.fire('Failure!', 'Please fill in all available fields.', 'error')
+
             this.newItem.Id = this.editedItem.Id
             this.newItem.FirstName = this.editedItem.FirstName
             this.newItem.MiddleInitial = this.editedItem.MiddleInitial
@@ -166,6 +184,7 @@ new Vue({
             this.newItem.Status = this.editedItem.Status
             this.newItem.DateEmployed = this.date2
             this.newItem.DateOfBirth = this.date
+
 
             addEmployee(this.newItem.Id, this.newItem.FirstName, this.newItem.MiddleInitial, this.newItem.LastName, this.newItem.DateOfBirth, this.newItem.DateEmployed, this.newItem.Status)
                 .then(response => {
@@ -213,6 +232,8 @@ new Vue({
         },
 
         save() {
+            if (this.creatingNewUser) return Swal.fire('Failure!', 'Press Add New User to save employee.', 'error')
+
             const Id = this.editedItem.Id
             const firstName = this.editedItem.FirstName
             const middleInitial = this.editedItem.MiddleInitial
@@ -238,6 +259,9 @@ new Vue({
                 this.employees.push(this.editedItem)
             }
             this.close()
+        },
+        createNewItem() {
+            this.creatingNewUser = true
         }
     },
 })

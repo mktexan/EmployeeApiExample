@@ -27,7 +27,7 @@
                         <v-spacer></v-spacer>
                         <v-dialog v-model="dialog" max-width="500px">
                             <template v-slot:activator="{ on }">
-                                <v-btn color="primary" dark class="mb-2" v-on="on">New Item</v-btn>
+                                <v-btn color="primary" dark class="mb-2" v-on="on"  @click="createNewItem">New Item</v-btn>
                             </template>
                             <v-card>
                                 <v-card-title>
@@ -104,11 +104,11 @@
                                                 </template>
                                             </v-col>
 
-                                            <v-col cols="12" sm="8" md="8">
+                                            <v-col cols="12" sm="12" md="8">
                                                 <v-subheader>
                                                     Active
                                                 </v-subheader>
-                                                <v-select :items="active" filled label="Solo field"  v-model="editedItem.Status"></v-select>
+                                                <v-select :items="active" v-model="editedItem.Status"></v-select>
                                             </v-col>
                                         </v-row>
                                     </v-container>
@@ -117,7 +117,7 @@
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
                                     <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                                    <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+                                    <v-btn color="blue darken-1" text @click="save">Save Edit</v-btn>
                                     <v-btn color="blue darken-1" text @click="createNewEmployee">Add New User</v-btn>
                                 </v-card-actions>
                             </v-card>
