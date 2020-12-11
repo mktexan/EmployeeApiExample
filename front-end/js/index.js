@@ -180,6 +180,8 @@ new Vue({
             this.newItem.DateOfEmployment = this.date2
             this.newItem.DateOfBirth = this.date
 
+            if(this.editedItem.Status == false) return Swal.fire('Failure!', 'You are not allowed to add a new employee as inactive.', 'error')
+
             addEmployee(this.newItem.Id, this.newItem.FirstName, this.newItem.MiddleInitial, this.newItem.LastName, this.newItem.DateOfBirth, this.newItem.DateOfEmployment, this.newItem.Status)
                 .then(response => {
                     if (response.ok) Swal.fire('Employee Added!', 'The employee has been added to the system.', 'success')
