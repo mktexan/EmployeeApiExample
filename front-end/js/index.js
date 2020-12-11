@@ -6,7 +6,7 @@ const deleteEmployee = (employeeId) => {
         headers: {
             'Content-Type': 'application/json',
             'employeeId': employeeId,
-            'authHeader': localStorage.getItem('authHeader')
+            'Authorization': localStorage.getItem('authHeader')
         },
     })
 }
@@ -16,7 +16,7 @@ const editEmployee = (ID, firstName, middleInitial, lastName, DOB, DOE, status, 
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
-            'authHeader': localStorage.getItem('authHeader')
+            'Authorization': localStorage.getItem('authHeader')
         },
         body: JSON.stringify({ editedId: editedId, employeeId: ID, firstName: firstName, middleInitial: middleInitial, lastName: lastName, dateOfBirth: DOB, dateOfEmployment: DOE, status: status })  //if you do not want to send any addional data,  replace the complete JSON.stringify(YOUR_ADDITIONAL_DATA) with null
     })
@@ -27,7 +27,7 @@ const getEmployees = () => {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'authHeader': localStorage.getItem('authHeader')
+            'Authorization': localStorage.getItem('authHeader')
         }
     })
 }
@@ -37,7 +37,7 @@ const addEmployee = (ID, firstName, middleInitial, lastName, DOB, DOE, status) =
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'authHeader': localStorage.getItem('authHeader')
+            'Authorization': localStorage.getItem('authHeader')
         },
         body: JSON.stringify({ employeeId: ID, firstName: firstName, middleInitial: middleInitial, lastName: lastName, dateOfBirth: DOB, dateOfEmployment: DOE, status: status })  //if you do not want to send any addional data,  replace the complete JSON.stringify(YOUR_ADDITIONAL_DATA) with null
     })
@@ -180,11 +180,12 @@ new Vue({
             this.newItem.DateOfEmployment = this.date2
             this.newItem.DateOfBirth = this.date
 
-            if(this.editedItem.Status == false) return Swal.fire('Failure!', 'You are not allowed to add a new employee as inactive.', 'error')
+            if (this.editedItem.Status == false) return Swal.fire('Failure!', 'You are not allowed to add a new employee as inactive.', 'error')
 
             addEmployee(this.newItem.Id, this.newItem.FirstName, this.newItem.MiddleInitial, this.newItem.LastName, this.newItem.DateOfBirth, this.newItem.DateOfEmployment, this.newItem.Status)
                 .then(response => {
                     if (response.ok) Swal.fire('Employee Added!', 'The employee has been added to the system.', 'success')
+                    else return Swal.fire('Error adding Employee!', 'The employee was not added. Check the ID to make sure its not a duplicate.', 'error')
 
                     this.employees.push(this.newItem)
 

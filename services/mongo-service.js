@@ -32,6 +32,7 @@ const modifyEmployee = async (employeeId, editedId, firstName, middleInitial, la
                 await internalDeleteEmployee(employeeId, editedId, firstName, middleInitial, lastName, dateOfBirth, dateOfEmployment, status)
                 return resolve()
             }
+
             employee.Id = employeeId
             employee.FirstName = firstName
             employee.MiddleInitial = middleInitial
@@ -48,7 +49,11 @@ const modifyEmployee = async (employeeId, editedId, firstName, middleInitial, la
 }
 
 const addEmployee = async (employeeId, firstName, middleInitial, lastName, dateOfBirth, dateOfEmployment, active) => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
+        const exists = await checkEmployeeExists(employeeId)
+
+        if (exists) return reject()
+
         EmployeeModel.findOne({ 'Id': employeeId }, async (err, employee) => {
             if (err) return reject(err)
             if (employee) return reject(constants.employeeExists)
@@ -88,6 +93,18 @@ const internalDeleteEmployee = (employeeId, editedId, firstName, middleInitial, 
             model.save()
 
             return resolve()
+        })
+    })
+}
+
+const checkEmployeeExists = (employeeId) => {
+    return new Promise((resolve, reject) => {
+        EmployeeModel.findOne({ 'Id': employeeId }, async (err, employee) => {
+            if (err) return resolve(false)
+
+            if (employee === null) return resolve(false)
+
+            return resolve(true)
         })
     })
 }
