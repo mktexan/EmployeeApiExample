@@ -129,6 +129,10 @@ new Vue({
         initialize() {
             getEmployees()
                 .then(response => {
+                    const status = response.status
+
+                    if (status === 401) return Swal.fire('Auth Failure!', 'You are not authorized.', 'error')
+
                     return response.json()
                 })
                 .then(data => {
@@ -183,7 +187,12 @@ new Vue({
 
             addEmployee(this.newItem.Id, this.newItem.FirstName, this.newItem.MiddleInitial, this.newItem.LastName, this.newItem.DateOfBirth, this.newItem.DateOfEmployment, this.newItem.Status)
                 .then(response => {
+                    const status = response.status
+
+                    if (status === 401) return Swal.fire('Auth Failure!', 'You are not authorized.', 'error')
+
                     if (response.ok) Swal.fire('Employee Added!', 'The employee has been added to the system.', 'success')
+
                     else return Swal.fire('Error adding Employee!', 'The employee was not added. Check the ID to make sure its not a duplicate.', 'error')
 
                     this.employees.push(this.newItem)
@@ -206,6 +215,9 @@ new Vue({
                     if (result.isConfirmed) {
                         deleteEmployee(employeeId)
                             .then(response => {
+                                const status = response.status
+
+                                if (status === 401) return Swal.fire('Auth Failure!', 'You are not authorized.', 'error')
                                 if (response.ok) Swal.fire('Employee Removed!', 'The employee has been removed from the system.', 'success')
 
                                 this.employees.splice(index, 1)
@@ -242,6 +254,9 @@ new Vue({
 
             editEmployee(Id, firstName, middleInitial, lastName, DOB, DOE, Status, editedId)
                 .then(response => {
+                    const status = response.status
+
+                    if (status === 401) return Swal.fire('Auth Failure!', 'You are not authorized.', 'error')
                     if (response.ok) Swal.fire('Employee Edited!', 'The employee has been successfully edited.', 'success')
 
                     return response.ok
