@@ -26,8 +26,6 @@ app.post("/addEmployee", (req, res) => {
     const dateOfEmployment = req.body.dateOfEmployment
     const active = req.body.status
     const authToken = req.headers.authheader
-
-    console.log('adding employee')
     
     if (authToken !== process.env.authHeaderKey) return res.sendStatus(400)
 

@@ -14,7 +14,7 @@ const deleteEmployee = async (employeeId) => {
 
 const getEmployees = async () => {
     return new Promise((resolve, reject) => {
-        EmployeeModel.find({}, async (err, employees) => {
+        EmployeeModel.find({ Status: true }, async (err, employees) => {
             if (err) return reject(err)
 
             return resolve(employees)
@@ -28,9 +28,10 @@ const modifyEmployee = async (employeeId, editedId, firstName, middleInitial, la
             if (err) return reject(err)
             if (!employee) return reject(constants.employeeDoesNotExist)
 
-            if (employeeId !== editedId)
-                return await internalDeleteEmployee(employeeId, editedId, firstName, middleInitial, lastName, dateOfBirth, dateOfEmployment, status)
-
+            if (employeeId !== editedId) {
+                await internalDeleteEmployee(employeeId, editedId, firstName, middleInitial, lastName, dateOfBirth, dateOfEmployment, status)
+                return resolve()
+            }
             employee.Id = employeeId
             employee.FirstName = firstName
             employee.MiddleInitial = middleInitial
