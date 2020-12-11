@@ -25,3 +25,7 @@ Or
 ``` sh
 $ node server.js
 ```
+
+```
+Go to localhost:8080 in your web browser
+```
