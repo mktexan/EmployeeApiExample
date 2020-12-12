@@ -26,7 +26,8 @@
                         <v-spacer></v-spacer>
                         <v-dialog v-model="dialog" max-width="500px">
                             <template v-slot:activator="{ on }">
-                                <v-btn color="primary" dark class="mb-2" v-on="on"  @click="createNewItem">New Employee</v-btn>
+                                <v-btn color="primary" dark class="mb-2" v-on="on" @click="createNewItem">New Employee
+                                </v-btn>
                             </template>
                             <v-card>
                                 <v-card-title>
@@ -138,9 +139,9 @@
         </v-app>
     </div>
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.25.1/moment.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://use.fontawesome.com/24fc242ce0.js"></script>
 <script src="./js/index.js"></script>
-
 </html>

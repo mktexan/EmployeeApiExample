@@ -136,6 +136,14 @@ new Vue({
                     return response.json()
                 })
                 .then(data => {
+
+                    for (let i = 0; i < data.length; i++) {
+                        const element = data[i]
+
+                        element.DateOfEmployment = moment(element.DateOfEmployment).format("MMM Do YYYY")
+                        element.DateOfBirth = moment(element.DateOfBirth).format("MMM Do YYYY")
+                    }
+
                     this.employees = data
                 })
                 .catch(err => {
@@ -194,6 +202,9 @@ new Vue({
                     if (response.ok) Swal.fire('Employee Added!', 'The employee has been added to the system.', 'success')
 
                     else return Swal.fire('Error adding Employee!', 'The employee was not added. Check the ID to make sure its not a duplicate.', 'error')
+
+                    this.newItem.DateOfEmployment = moment(this.newItem.DateOfEmployment).format("MMM Do YYYY")
+                    this.newItem.DateOfBirth = moment(this.newItem.DateOfBirth).format("MMM Do YYYY")
 
                     this.employees.push(this.newItem)
 
