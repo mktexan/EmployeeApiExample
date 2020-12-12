@@ -95,7 +95,7 @@ new Vue({
             DateOfBirth: null,
             DateOfEmployment: null,
             Status: false,
-            EditedId: ''
+            EditedId: null
         },
         newItem: {
             Id: null,
@@ -136,7 +136,6 @@ new Vue({
                     return response.json()
                 })
                 .then(data => {
-
                     for (let i = 0; i < data.length; i++) {
                         const element = data[i]
 
