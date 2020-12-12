@@ -17,6 +17,22 @@
 <body>
     <div id="app">
         <v-app id="inspire">
+            <template>
+                <div>
+                    <v-toolbar dark prominent style="background-color: #19292e;">
+                        <v-app-bar-nav-icon></v-app-bar-nav-icon>
+
+                        <v-img src="./pics/starboard.PNG" max-height="293" max-width="261">
+                        </v-img>
+
+                        <v-spacer></v-spacer>
+
+                        <v-btn icon>
+                            <v-icon>mdi-export</v-icon>
+                        </v-btn>
+                    </v-toolbar>
+                </div>
+            </template>
             <v-data-table :headers="headers" :items="employees" sort-by="calories" class="elevation-1">
                 <template v-slot:top>
                     <v-toolbar flat color="white">
