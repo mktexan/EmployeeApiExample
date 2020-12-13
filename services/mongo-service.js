@@ -29,7 +29,7 @@ const modifyEmployee = async (employeeId, editedId, firstName, middleInitial, la
             if (!employee) return reject(constants.employeeDoesNotExist)
 
             if (employeeId !== editedId) {
-                await internalDeleteEmployee(employeeId, editedId, firstName, middleInitial, lastName, dateOfBirth, dateOfEmployment, status)
+                await newEmployeeId(employeeId, editedId, firstName, middleInitial, lastName, dateOfBirth, dateOfEmployment, status)
                 return resolve()
             }
 
@@ -50,9 +50,9 @@ const modifyEmployee = async (employeeId, editedId, firstName, middleInitial, la
 
 const addEmployee = async (employeeId, firstName, middleInitial, lastName, dateOfBirth, dateOfEmployment, active) => {
     return new Promise(async (resolve, reject) => {
-        const exists = await checkEmployeeExists(employeeId)
+        const employeeExists = await checkEmployeeExists(employeeId)
 
-        if (exists) return reject()
+        if (employeeExists) return reject()
 
         EmployeeModel.findOne({ 'Id': employeeId }, async (err, employee) => {
             if (err) return reject(err)
@@ -75,7 +75,7 @@ const addEmployee = async (employeeId, firstName, middleInitial, lastName, dateO
     })
 }
 
-const internalDeleteEmployee = (employeeId, editedId, firstName, middleInitial, lastName, dateOfBirth, dateOfEmployment, status) => {
+const newEmployeeId = (employeeId, editedId, firstName, middleInitial, lastName, dateOfBirth, dateOfEmployment, status) => {
     return new Promise((resolve, reject) => {
         EmployeeModel.deleteOne({ 'Id': editedId }, async (err, deleted) => {
             if (err) return reject(err)
@@ -101,7 +101,6 @@ const checkEmployeeExists = (employeeId) => {
     return new Promise((resolve, reject) => {
         EmployeeModel.findOne({ 'Id': employeeId }, async (err, employee) => {
             if (err) return resolve(false)
-
             if (employee === null) return resolve(false)
 
             return resolve(true)

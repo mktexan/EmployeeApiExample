@@ -152,8 +152,10 @@ new Vue({
         },
 
         editItem(item) {
+            console.log(item)
             this.editingUser = true
             this.creatingNewUser = false
+            // this.date = new Date(item.DateOfBirth).toJSON()
             localStorage.setItem('editedId', item.Id)
             this.editedIndex = this.employees.indexOf(item)
             this.editedItem = Object.assign({}, item)
@@ -257,8 +259,8 @@ new Vue({
             const firstName = this.editedItem.FirstName
             const middleInitial = this.editedItem.MiddleInitial
             const lastName = this.editedItem.LastName
-            const DOB = this.editedItem.DateOfBirth
-            const DOE = this.editedItem.DateOfEmployment
+            const DOB = this.date !== null ? this.date : this.editedItem.DateOfBirth
+            const DOE = this.date2 !== null ? this.date2 : this.editedItem.DateOfEmployment
             const Status = this.editedItem.Status
             const editedId = localStorage.getItem('editedId')
 

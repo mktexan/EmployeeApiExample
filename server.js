@@ -25,7 +25,6 @@ app.use(express.json())
 app.use(morgan(constants.dev))
 
 app.use((req, res, next) => {
-    //Mocked API authorization
     const authToken = req.headers.authorization
 
     if (authToken !== process.env.authHeaderKey) return res.sendStatus(401)
