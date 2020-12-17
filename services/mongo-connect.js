@@ -1,11 +1,12 @@
+const constants = require('../constants/constants')
 const connectToMongoDb = (mongoose) => {
     mongoose.connect(process.env.mongoConnectionString, { useNewUrlParser: true, useUnifiedTopology: true, retryWrites: false })
 
-    let db = mongoose.connection
+    const db = mongoose.connection
 
-    db.once('open', () => console.log('connected to the database'))
+    db.once('open', () => console.log(constants.databaseConnectionSuccess))
 
-    db.on('error', console.error.bind(console, 'MongoDB connection error:'))
+    db.on('error', () => { throw new Error(constants.databaseConnectionFailed) })
 }
 
 module.exports = { connectToMongoDb }

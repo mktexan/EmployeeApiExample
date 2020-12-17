@@ -15,6 +15,9 @@ const mongoConnect = './services/mongo-connect'
 //*** Error Messages ***
 const employeeExists = 'Employee already exists!'
 const employeeDoesNotExist = 'Employee does not exist!'
+const databaseConnectionFailed = 'Failed to connect to mongo database!'
+
+const databaseConnectionSuccess = 'connected to the database'
 
 const port = process.env.PORT || 8080
 
@@ -24,5 +27,6 @@ module.exports = {
     employees, dev, mongoService,
     port, serverActive, employeeController,
     employeeExists, employeeDoesNotExist, frontEnd, 
-    employeesRoute, mongoConnect
+    employeesRoute, mongoConnect, databaseConnectionFailed,
+    databaseConnectionSuccess
 }
